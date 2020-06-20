@@ -1,18 +1,17 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View } from "react-native";
- 
-export const RADIUS = 7
 
 class Circle extends PureComponent {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
     }
 
     render() {
-        const x = this.props.position[0] - RADIUS / 2;
-        const y = this.props.position[1] - RADIUS / 2;
+        const x = this.props.position[0] - this.props.radius;
+        const y = this.props.position[1] - this.props.radius;
+        const r = this.props.radius;
         return (
-            <View style={[styles.finger, { left: x, top: y }]} />
+            <View style={[styles.finger, { left: x, top: y, width: r * 2, height: r * 2, borderRadius: r * 2 }]} />
         );
     }
 }
@@ -20,9 +19,6 @@ class Circle extends PureComponent {
 const styles = StyleSheet.create({
     finger: {
         borderColor: "#CCC",
-        borderRadius: RADIUS * 2,
-        width: RADIUS * 2,
-        height: RADIUS * 2,
         backgroundColor: "rgba(10,32,255,0.7)",
         position: "absolute"
     }
