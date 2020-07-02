@@ -71,6 +71,7 @@ export default class BestGameEver extends PureComponent {
             </GameEngine>
         );
     }
+
 }
  
 const styles = StyleSheet.create({
