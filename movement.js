@@ -1,4 +1,5 @@
-import { RADIUS } from "./App"
+import { RADIUS, NUM_OF_CIRCLES, signal } from "./App"
+import { GameEngine } from "react-native-game-engine";
 
 const END_OF_LIFE = 120;
 
@@ -73,6 +74,7 @@ const shrink = (circle) => {
     if (circle.radius < 0) {
         circle.phase = END_OF_LIFE + 1;
         circle.position = [-5, -5];
+        signal('died');
     }
     circle.radius -= 1;
     redraw(circle);
@@ -100,6 +102,7 @@ const collosionDetect = (entities) => {
                     let iR = circle.radius; 
                     if (iR + jR > Math.sqrt((jX - iX) * (jX - iX) + (jY - iY) * (jY - iY))) {
                         otherCircle.phase = 1;
+                        signal('hit');
                     }
                 }
             }

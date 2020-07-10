@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 class Circle extends PureComponent {
     constructor() {
         super();
-    }
+    };
 
     render() {
         const x = this.props.position[0] - this.props.radius;
@@ -13,7 +13,7 @@ class Circle extends PureComponent {
         return (
             <View style={[styles.finger, { left: x, top: y, width: r * 2, height: r * 2, borderRadius: r * 2 }]} />
         );
-    }
+    };
 }
  
 const styles = StyleSheet.create({
