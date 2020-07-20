@@ -17,7 +17,7 @@ let me = null;
 export default class Boomer extends PureComponent {
     circles = 0;
     booming = 0;
-    died = 0;
+    died = -1;
     
     constructor() {
         super();
@@ -25,6 +25,7 @@ export default class Boomer extends PureComponent {
         this.state = {
             running: false
         };
+        me = this;
     };
 
     createCircle() {
@@ -57,43 +58,43 @@ export default class Boomer extends PureComponent {
     };
 
     boomer(event) {
-        if (!me.entities[me.circles]) {
-            me.entities[me.circles] = me.createCircle();
-            me.entities[me.circles].speed = [0, 0];
-            me.entities[me.circles].position = [event.nativeEvent.pageX - RADIUS / 2 + 1, event.nativeEvent.pageY - RADIUS / 2 + 1];
-            me.entities[me.circles].phase = 1;
-            me.booming++;
+        if (!this.entities[this.circles]) {
+            this.entities[this.circles] = this.createCircle();
+            this.entities[this.circles].speed = [0, 0];
+            this.entities[this.circles].position = [event.nativeEvent.pageX - RADIUS / 2 + 1, event.nativeEvent.pageY - RADIUS / 2 + 1];
+            this.entities[this.circles].phase = 1;
+            this.booming++;
         }
     };
 
     listen(message) {
         if (message == 'hit') {
-            me.booming++;
+            this.booming++;
         }
         if (message == 'died') {
-            me.booming--;
-            me.died++;
-            if (me.booming == 0 && me.entities[me.circles]) {
-                me.setState({running: false});
-                me.gameEngine.stop();
-                console.log(me.died);
+            this.booming--;
+            this.died++;
+            if (this.booming == 0 && this.entities[this.circles]) {
+                this.setState({running: false});
+                this.gameEngine.stop();
+                console.log(this.died);
             }
         }
     };
 
     start() {
-        me.entities = {};
-        me.circles = 0;
-        me.booming = 0;
-        me.died = 0;
+        this.entities = {};
+        this.circles = 0;
+        this.booming = 0;
+        this.died = -1;
         for (let i = 0; i < NUM_OF_CIRCLES; i++) {
-            me.entities[i] = me.createCircle();
-            me.circles++;
+            this.entities[i] = this.createCircle();
+            this.circles++;
         }
-        if (me.gameEngine) {
-            me.gameEngine.swap(me.entities);
+        if (this.gameEngine) {
+            this.gameEngine.swap(this.entities);
         }
-        me.setState({running: true});
+        this.setState({running: true});
     };
      
     render() {
@@ -101,18 +102,17 @@ export default class Boomer extends PureComponent {
             <GameEngine
                 ref={(ref) => {
                     this.gameEngine = ref;
-                    me = this;
                 }}
                 style={styles.container}
                 systems={[Movement]}
                 entities={this.entities}
                 running={this.state.running}>
                 <StatusBar hidden={true} />
-                <TouchableWithoutFeedback onPress={this.boomer}>
+                <TouchableWithoutFeedback onPress={(event) => this.boomer(event)}>
                     <View style={styles.captureLayer}/>
                 </TouchableWithoutFeedback>
                 {!this.state.running && <View style={styles.fullScreen}>
-                    <Button style={{color: 'white', fontSize:48}} onPress={this.start} title="Start"></Button>
+                    <Button style={{color: 'white', fontSize:48}} onPress={() => this.start()} title="Start"></Button>
                 </View>}
             </GameEngine>
         );
