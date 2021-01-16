@@ -89,20 +89,35 @@ const redraw = (circle) => {
 
 const collosionDetect = (entities) => {
     for (let i in entities) {
-        let circle = entities[i];
-        if (circle.phase > 0) {
+        let shape = entities[i];
+        if (shape.phase > 0) {
             for (let j in entities) {
-                let otherCircle = entities[j]; 
-                if (i != j && otherCircle.phase == 0) {
-                    let jX = otherCircle.position[0];
-                    let jY = otherCircle.position[1];
-                    let jR = otherCircle.radius;
-                    let iX = circle.position[0];
-                    let iY = circle.position[1];
-                    let iR = circle.radius; 
-                    if (iR + jR > Math.sqrt((jX - iX) * (jX - iX) + (jY - iY) * (jY - iY))) {
-                        otherCircle.phase = 1;
-                        signal('hit');
+                let otherShape = entities[j];
+                if (i != j && otherShape.phase == 0) {
+                    if (shape.type == "circle" && otherShape.type == "circle") {
+                        let jX = otherShape.position[0];
+                        let jY = otherShape.position[1];
+                        let jR = otherShape.radius;
+                        let iX = shape.position[0];
+                        let iY = shape.position[1];
+                        let iR = shape.radius;
+                        if (iR + jR > Math.sqrt((jX - iX) * (jX - iX) + (jY - iY) * (jY - iY))) {
+                            otherShape.phase = 1;
+                            signal('hit');
+                        }
+                    } else if (shape.type == "square" && otherShape.type == "square"){
+                        //TBD
+                    } else {
+                        let sX = shape.type == "square" ? shape.position[0] : otherShape.position[0];
+                        let sY = shape.type == "square" ? shape.position[1] : otherShape.position[1];
+                        let sR = shape.type == "square" ? shape.radius : otherShape.radius;
+                        let cX = shape.type == "square" ? otherShape.position[0] : shape.position[0];
+                        let cY = shape.type == "square" ? otherShape.position[1] : shape.position[1];
+                        let cR = shape.type == "square" ? otherShape.radius : shape.radius;
+                        if (!(cX + cR < sX || cX - cR > sX + sR) && !(cY + cR < sY || cY - cR > sY + sR)) {
+                            otherShape.phase = 1;
+                            signal('hit');
+                        } 
                     }
                 }
             }

@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { AppRegistry, StyleSheet, StatusBar, Dimensions, TouchableWithoutFeedback, View, Button } from "react-native";
 import { GameEngine } from "react-native-game-engine";
 import { Circle } from "./circle";
+import { Square } from "./square";
 import { Movement } from "./movement"
  
 export const RADIUS = 7;
@@ -28,7 +29,7 @@ export default class Boomer extends PureComponent {
         me = this;
     };
 
-    createCircle() {
+    createCircle(backgroundColor) {
         let posX = 5;
         let posY = 5;
         let partialSpeed = Math.random()
@@ -52,14 +53,45 @@ export default class Boomer extends PureComponent {
             speed: [speedX, speedY],
             direction: [0, 0],
             radius: RADIUS,
-            phase: 0, 
+            phase: 0,
+            backgroundColor: backgroundColor, 
             renderer: <Circle />
         }
     };
 
+    createSquare(backgroundColor) {
+        let posX = 5;
+        let posY = 5;
+        let partialSpeed = Math.random()
+        let speedX = partialSpeed;
+        let speedY = 1 - partialSpeed;
+        partialSpeed = Math.random();
+        speedX += partialSpeed;
+        speedY += 1 - partialSpeed;
+        speedX /= 2;
+        speedY /= 2;
+        if (Math.random() > 0.5) {
+            speedX *= -1;
+        }
+        if (Math.random() > 0.5) {
+            speedY *= -1;
+        } 
+        posX += Math.floor(Math.random() * (Dimensions.get('window').width - RADIUS * 2));
+        posY += Math.floor(Math.random() * (Dimensions.get('window').height - RADIUS * 2));
+        return {
+            position: [posX,  posY],
+            speed: [speedX, speedY],
+            direction: [0, 0],
+            radius: RADIUS,
+            phase: 0,
+            backgroundColor: backgroundColor, 
+            renderer: <Square />
+        };
+    }
+
     boomer(event) {
         if (!this.entities[this.circles]) {
-            this.entities[this.circles] = this.createCircle();
+            this.entities[this.circles] = this.createSquare("rgba(255, 10, 32, 0.7)");
             this.entities[this.circles].speed = [0, 0];
             this.entities[this.circles].position = [event.nativeEvent.pageX - RADIUS / 2 + 1, event.nativeEvent.pageY - RADIUS / 2 + 1];
             this.entities[this.circles].phase = 1;
@@ -123,7 +155,8 @@ export default class Boomer extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#AAA"
+        backgroundColor: "#AAA",
+        overflow: "hidden"
     },
     captureLayer: {
         flex: 1,
