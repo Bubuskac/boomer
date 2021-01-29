@@ -29,7 +29,7 @@ export default class Boomer extends PureComponent {
         me = this;
     };
 
-    createCircle(backgroundColor) {
+    createShape(shape, backgroundColor) {
         let posX = 5;
         let posY = 5;
         let partialSpeed = Math.random()
@@ -55,38 +55,16 @@ export default class Boomer extends PureComponent {
             radius: RADIUS,
             phase: 0,
             backgroundColor: backgroundColor, 
-            renderer: <Circle />
+            renderer: shape
         }
+    }
+
+    createCircle(backgroundColor) {
+        return this.createShape(<Circle />, backgroundColor);
     };
 
     createSquare(backgroundColor) {
-        let posX = 5;
-        let posY = 5;
-        let partialSpeed = Math.random()
-        let speedX = partialSpeed;
-        let speedY = 1 - partialSpeed;
-        partialSpeed = Math.random();
-        speedX += partialSpeed;
-        speedY += 1 - partialSpeed;
-        speedX /= 2;
-        speedY /= 2;
-        if (Math.random() > 0.5) {
-            speedX *= -1;
-        }
-        if (Math.random() > 0.5) {
-            speedY *= -1;
-        } 
-        posX += Math.floor(Math.random() * (Dimensions.get('window').width - RADIUS * 2));
-        posY += Math.floor(Math.random() * (Dimensions.get('window').height - RADIUS * 2));
-        return {
-            position: [posX,  posY],
-            speed: [speedX, speedY],
-            direction: [0, 0],
-            radius: RADIUS,
-            phase: 0,
-            backgroundColor: backgroundColor, 
-            renderer: <Square />
-        };
+        return this.createShape(<Square />, backgroundColor);
     }
 
     boomer(event) {
